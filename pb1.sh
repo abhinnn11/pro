@@ -39,12 +39,11 @@ pb1() {
         echo "Starting detached recording: $jobname"
 
         ####################################################
-        # DETACHED PROCESS LAUNCH (the real fix)
+        # REAL DAEMON LAUNCH
         ####################################################
-        nohup setsid bash -c "
-            $(declare -f pb1_worker)
-            pb1_worker \"$URL\" \"$referer\" \"$origin\" \"$tmpfile\" \"$output_file\" \"$cookiejar\"
-        " >> \"$joblog\" 2>&1 < /dev/null &
+        nohup setsid pb1_worker.sh \
+            "$URL" "$referer" "$origin" "$tmpfile" "$output_file" "$cookiejar" \
+            >> "$joblog" 2>&1 < /dev/null &
 
         echo $! > "$pidfile"
 
